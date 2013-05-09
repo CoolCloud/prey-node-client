@@ -669,3 +669,37 @@ utils.prepare_test_no_internet_connection = function (callback) {
     callback(null, my_stdout);
   }
 }
+
+/**
+ * @param   {Callback}  callback
+ *
+ * @summary Creates a temporary test environment to know
+ *          what happens when the SIGUSR signal is received,
+ *          and the client has lost its internet connection.
+ */
+utils.prepare_test_sigusr_signal = function (callback) {
+  // Execute an instance of the cli_controller
+  var file_name         = os_utils.get_sigusr_signal_executable_name(),
+      flag_exited_proc  = 0,
+      response          = {},
+      spawn             = require('child_process').spawn;
+
+  var cmd_alpha       = spawn('node', [path.join(__dirname, file_name), 'alpha']),
+      cmd_beta        = spawn('node', [path.join(__dirname, file_name), 'beta', cmd_alpha.pid]);
+
+  cmd_alpha.on('exit', function (code) {
+    done_preparing('alpha', code);
+  });
+
+  cmd_beta.on('exit', function (code) {
+    done_preparing('beta', code);
+  });
+
+  function done_preparing (flavour, code) {
+    flag_exited_proc += 1;
+    response[flavour] = code;
+    if (flag_exited_proc === 2) {
+      return callback(null, response);
+    }
+  }
+}

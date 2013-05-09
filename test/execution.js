@@ -86,7 +86,16 @@ describe('Execution of [./bin/prey]', function () {
     }
   });
 
-  it('E');
+  it('#wip Should ? when the SIGUSR signal is received and the client has lost its internet connection', function (done) {
+    test_utils.prepare_test_sigusr_signal(prepared_env_executed);
+
+    function prepared_env_executed (err, response) {
+      if (err) throw err;
+      console.log(response);
+      done();
+    }
+  });
+
   it('F');
   it('G');
 

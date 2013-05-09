@@ -213,3 +213,12 @@ os_utils.invoke_config_activate = function (username, directory, execute_command
 os_utils.get_check_symlink_command = function (directory) {
   return "ls -al " + path.resolve(directory, 'current');
 }
+
+/**
+ * @summary Returns the name of the js file to make
+ *          the "get SIGUSR signal" test
+ */
+
+os_utils.get_sigusr_signal_executable_name = function () {
+  return 'sigusr_signal_tester_nix.js';
+}
